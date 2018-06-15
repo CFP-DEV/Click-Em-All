@@ -1,0 +1,123 @@
+.profile, .navigation, .footer-navigation {
+    position: absolute;
+}
+
+.profile, .footer-navigation {
+    left: 40px;
+}
+
+.profile, .navigation {
+    top: 40px;
+}
+
+.profile {
+    display: flex;
+
+    &__avatar, &__info {
+        height: 80px;
+    }
+
+    &__avatar {
+        width: 80px;
+        margin-right: 20px;
+        border: 2px solid $white;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .profile-info {
+        &__name {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        &__health, &__experience {
+            &__value {
+                font-size: 10px;
+                font-weight: 300;
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 5px;
+            }
+
+            &__bar {
+                height: 5px;
+                width: 180px;
+                background: $white;
+            }
+        }
+
+        &__health {
+            margin-bottom: 10px;
+        }
+    }
+}
+
+.navigation, .footer-navigation {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    list-style-type: none;
+
+    &__item {
+        margin-right: 20px;
+    }
+}
+
+.navigation {
+    right: 40px;
+
+    .text--is-yellow {
+        margin-left: 5px;
+    }
+}
+
+.footer-navigation {
+    bottom: 40px;
+}
+
+.game-content {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .monster {
+        &__health {
+            margin-bottom: 20px;
+
+            &__value {
+                font-size: 10px;
+                font-weight: 300;
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 5px;
+            }
+
+            &__bar {
+                height: 5px;
+                width: 180px;
+                background: $white;
+            }
+        }
+
+        &__name {
+            height: 180px;
+            width: 180px;
+            border: 2px solid $white;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-content: center;
+
+            span {
+                width: 100%;
+                display: block;
+                text-align: center;
+            }
+        }
+    }
+}

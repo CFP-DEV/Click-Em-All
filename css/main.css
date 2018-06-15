@@ -1,0 +1,129 @@
+* {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  width: 100%;
+  background: #11151C;
+  color: #FFFFFF;
+  font-family: "Montserrat", sans-serif;
+  position: relative; }
+
+a {
+  text-decoration: none;
+  color: inherit; }
+
+a,
+a:href,
+button,
+button:href {
+  cursor: pointer; }
+
+.btn {
+  height: 60px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+.btn--is-outline {
+  border: 2px solid #FFFFFF;
+  font-size: 12px; }
+  .btn--is-outline:hover {
+    background: #FFFFFF;
+    color: #11151C; }
+
+.text--is-red {
+  color: #F20B5F; }
+
+.text--is-yellow {
+  color: #FFE74C; }
+
+.profile, .navigation, .footer-navigation {
+  position: absolute; }
+
+.profile, .footer-navigation {
+  left: 40px; }
+
+.profile, .navigation {
+  top: 40px; }
+
+.profile {
+  display: flex; }
+  .profile__avatar, .profile__info {
+    height: 80px; }
+  .profile__avatar {
+    width: 80px;
+    margin-right: 20px;
+    border: 2px solid #FFFFFF;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center; }
+  .profile .profile-info__name {
+    font-size: 14px;
+    margin-bottom: 5px; }
+  .profile .profile-info__health__value, .profile .profile-info__experience__value {
+    font-size: 10px;
+    font-weight: 300;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px; }
+  .profile .profile-info__health__bar, .profile .profile-info__experience__bar {
+    height: 5px;
+    width: 180px;
+    background: #FFFFFF; }
+  .profile .profile-info__health {
+    margin-bottom: 10px; }
+
+.navigation, .footer-navigation {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  list-style-type: none; }
+  .navigation__item, .footer-navigation__item {
+    margin-right: 20px; }
+
+.navigation {
+  right: 40px; }
+  .navigation .text--is-yellow {
+    margin-left: 5px; }
+
+.footer-navigation {
+  bottom: 40px; }
+
+.game-content {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+  .game-content .monster__health {
+    margin-bottom: 20px; }
+    .game-content .monster__health__value {
+      font-size: 10px;
+      font-weight: 300;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px; }
+    .game-content .monster__health__bar {
+      height: 5px;
+      width: 180px;
+      background: #FFFFFF; }
+  .game-content .monster__name {
+    height: 180px;
+    width: 180px;
+    border: 2px solid #FFFFFF;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center; }
+    .game-content .monster__name span {
+      width: 100%;
+      display: block;
+      text-align: center; }
+
+/*# sourceMappingURL=main.css.map */

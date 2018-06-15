@@ -1,0 +1,27 @@
+* {
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    width: 100%;
+    background: $dark;
+    color: $white;
+    font-family: $font-1;
+    position: relative;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a, 
+a:href, 
+button, 
+button:href {
+    cursor: pointer;
+}

@@ -1,0 +1,17 @@
+.btn {
+    height: 60px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn--is-outline {
+    border: 2px solid $white;
+    font-size: 12px;
+
+    &:hover {
+        background: $white;
+        color: $dark;
+    }
+}
