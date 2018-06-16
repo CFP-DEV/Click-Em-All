@@ -1,3 +1,42 @@
+class Item {
+    constructor (config) {
+        // Name
+        this.name = config.name || 'Default Item';
+
+        // Description
+        this.description = config.description || 'Default Description';
+
+        // Value
+        this.value = config.value || 1;
+    }
+}
+
+class Potion extends Item {
+    constructor (config) {
+        super (config);
+
+        // Health Value
+        this.healthValue = config.healthValue;
+    }
+}
+
+class Store {
+    constructor () {
+        this.offer = [
+            new Potion({ name: 'Health Potion', description: 'Restore your health (50).', value: 20, healthValue: 50}),
+        ];
+    }
+
+    // Pucharse
+    pucharse (itemID) {
+        if (!itemID || !this.offer[itemID]) {
+            return false;
+        }
+
+        return this.offer[itemID];
+    }
+}
+
 class Character {
     constructor (config) {
         // Name
@@ -8,7 +47,7 @@ class Character {
         this.currentHealth = config.currentHealth || this.maxHealth;
 
         // Armor
-        this.armor = config.armor || 2;
+        this.armor = config.armor || 0;
         
         // Damage
         this.damage = config.damage || 5;
@@ -98,6 +137,9 @@ class Player extends Character {
 
         // Gold
         this.gold = config.gold;
+
+        // Inventory
+        this.inventory = [];
 
         // UI
         this.interface = {
@@ -295,6 +337,9 @@ class Game {
         
         this.enemy = new Monster(enemyConfig);
 
+        // Create Store
+        this.store = new Store();
+
         // Initialize UI
         this.initUI();
     }
@@ -302,6 +347,10 @@ class Game {
     initUI () {
         // Monster Events
         this.enemy.interface.name.addEventListener('click', (e) => {
+            // Monster Turn
+            this.player.receiveDamage(this.enemy.dealDamage());
+
+            // Player Turn
             this.enemy.receiveDamage(this.player.dealDamage());
         });
 
