@@ -46,11 +46,30 @@
                 height: 5px;
                 width: 180px;
                 background: $white;
+
+                span {
+                    display: block;
+                    height: 5px;
+                }
             }
         }
 
         &__health {
             margin-bottom: 10px;
+
+            &__bar {
+                span {
+                    background: $red;
+                }
+            }
+        }
+
+        &__experience {
+            &__bar {
+                span {
+                    background: $yellow;
+                }
+            }
         }
     }
 }
