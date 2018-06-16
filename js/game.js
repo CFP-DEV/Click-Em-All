@@ -50,8 +50,12 @@ class Character {
 
         this.currentHealth -= realDamage;
 
-        // Alive Check
-        isAlive();
+        if (this.currentHealth <= 0) {
+            this.onDeath();
+        }
+
+        // Update UI
+        this.updateUI();
     }
 
     // Armor
@@ -114,15 +118,15 @@ class Player extends Character {
 
     // Experience
     inceaseExperience (amount) {
-        if (this.experience + amount >= this.maxExperience) {
-            let leftExperience = this.experience + amount - this.maxExperience;
+        if (this.currentExperience + amount >= this.maxExperience) {
+            let leftExperience = this.currentExperience + amount - this.maxExperience;
 
             this.increaseLevel();
 
-            this.experience += leftExperience;
+            this.currentExperience = leftExperience;
+        } else {
+            this.currentExperience += amount;
         }
-
-        this.experience += amount;
 
         // Update UI
         this.updateUI();
@@ -177,6 +181,11 @@ class Player extends Character {
         // UI - Health Bar
         let healthBarWidth = basicHealth * 180 / 100;
         this.interface.healthBar.children[0].style.width = `${healthBarWidth}px`;
+    }
+
+    // Death
+    onDeath () {
+        console.log('GAME OVER');
     }
 }
 
@@ -240,6 +249,19 @@ class Monster extends Character {
          let healthBarWidth = basicHealth * 180 / 100;
          this.interface.healthBar.children[0].style.width = `${healthBarWidth}px`;
     }
+
+    // Death
+    onDeath () {
+        // Respawn
+        this.currentHealth = this.maxHealth;
+
+        // Update UI
+        this.updateUI();
+
+        // Trigger Event
+        let event = new CustomEvent('monsterDeath', { detail: this.getReward() });
+        document.dispatchEvent(event);
+    }
 }
 
 class Game {
@@ -252,7 +274,7 @@ class Game {
             maxHealth: 100,
             currentExperience: 0,
             armor: 2,
-            damage: 5,
+            damage: 10,
             gold: 0,
         }
 
@@ -278,7 +300,19 @@ class Game {
     }
 
     initUI () {
-        //
+        // Monster Events
+        this.enemy.interface.name.addEventListener('click', (e) => {
+            this.enemy.receiveDamage(this.player.dealDamage());
+        });
+
+        // Monster Death
+        document.addEventListener('monsterDeath', (e) => {
+            // Incerease Gold
+            this.player.increaseGold(e.detail.gold);
+
+            // Increase Experience
+            this.player.inceaseExperience(e.detail.experience);
+        });
     }
 }
 
