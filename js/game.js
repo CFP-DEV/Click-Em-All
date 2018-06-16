@@ -37,6 +37,48 @@ class Store {
     }
 }
 
+class Miner {
+    constructor (config) {
+        // Name
+        this.name = config.name || 'Default Miner';
+
+        // Description
+        this.description = config.description || 'Default Description';
+
+        // Income
+        this.income = config.income || 1;
+
+        // Quanity
+        this.quanity = config.quanity || 0;
+    }
+
+    // Quanity Management
+    increaseQuanity () {
+        this.quanity++;
+    }
+
+    // Get Income
+    getIncome () {
+        return this.income * this.quanity;
+    }
+}
+
+class Mine {
+    constructor () {
+        // Peon
+        this.peon = new Miner({ name: 'Peon', description: 'Me peon, me work.', income: 1, quanity: 0, value: 50 });
+
+        // Mine Cart
+        this.mineCart = new Miner({ name: 'Mine Cart', description: 'Not only for coal.', income: 5, quanity: 0, value: 250  });
+
+        // Drillers
+        this.drillers = new Miner({ name: 'Drillers', description: 'Do not confuse with dealers.', income: 10, quanity: 0, value: 500  });
+
+        // Senior Perons
+        this.seniorWorkers = new Miner({ name: 'Senior Peons', description: 'Me smart, me earns a lot, me the best.', income: 50, quanity: 0, value: 2500 });
+    }
+}
+
 class Character {
     constructor (config) {
         // Name
