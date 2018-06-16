@@ -105,11 +105,56 @@ class Player extends Character {
             healthBar: document.getElementById('playerHealthBar'),
         }
 
-        // UI - Level
-        this.interface.level.innerHTML = this.level;
-
         // UI - Name
         this.interface.name.innerHTML = this.name;
+
+        // UI - Initial Update
+        this.updateUI();
+    }
+
+    // Experience
+    inceaseExperience (amount) {
+        if (this.experience + amount >= this.maxExperience) {
+            let leftExperience = this.experience + amount - this.maxExperience;
+
+            this.increaseLevel();
+
+            this.experience += leftExperience;
+        }
+
+        this.experience += amount;
+
+        // Update UI
+        this.updateUI();
+    }
+
+    // Gold
+    increaseGold (amount) {
+        this.gold += amount;
+    }
+
+    decreaseGold (amount) {
+        this.gold -= amount;
+    }
+
+    // Level
+    increaseLevel (amount = 1) {
+        this.level += amount;
+
+        // Increase Maximum Experience
+        this.maxExperience *= 2;
+
+        // Update UI
+        this.interface.level.innerHTML = this.level;
+
+        // UI
+        this.updateUI();
+    }
+    
+    // UI
+    updateUI () {
+        // UI - Level
+        this.interface.level.innerHTML = this.level;
 
         // Basic Experience
         let basicExperience = (this.currentExperience * 100) / this.maxExperience;
@@ -133,43 +178,6 @@ class Player extends Character {
         let healthBarWidth = basicHealth * 180 / 100;
         this.interface.healthBar.children[0].style.width = `${healthBarWidth}px`;
     }
-
-    // Experience
-    inceaseExperience (amount) {
-        if (this.experience + amount >= this.maxExperience) {
-            let leftExperience = this.experience + amount - this.maxExperience;
-
-            this.increaseLevel();
-
-            this.experience += leftExperience;
-        }
-
-        this.experience += amount;
-
-        // Update UI
-        
-    }
-
-    // Gold
-    increaseGold (amount) {
-        this.gold += amount;
-    }
-
-    decreaseGold (amount) {
-        this.gold -= amount;
-    }
-
-    // Level
-    increaseLevel (amount = 1) {
-        this.level += amount;
-
-        // Increase Maximum Experience
-        this.maxExperience *= 2;
-
-        // Update UI
-        this.interface.level.innerHTML = this.level;
-    }
-
 }
 
 class Monster extends Character {
@@ -182,6 +190,19 @@ class Monster extends Character {
 
         // Rewards
         this.reward = config.reward;
+
+        // UI
+        this.interface = {
+            name: document.getElementById('monsterName'),
+            health: document.getElementById('monsterHealth'),
+            healthBar: document.getElementById('monsterHealthBar'),
+        }
+
+        // UI - Name
+        this.interface.name.innerHTML = this.name;
+
+        // UI - Initial Update
+        this.updateUI();
     }
 
     generateName (name) {
@@ -198,12 +219,26 @@ class Monster extends Character {
             'Ruthless',
         ];
 
-        return adjectives[Math.floor(Math.random() * (adjectives.length - 1))] + ' ' + name;
+        return '<span class="text--is-red">' + adjectives[Math.floor(Math.random() * (adjectives.length - 1))] + '</span><span>' + name + '</span>';
     }
 
     // Reward
     getReward () {
         return this.reward;
+    }
+
+    // UI
+    updateUI () {
+         // Basic Health
+         let basicHealth = (this.currentHealth * 100) / this.maxHealth;
+ 
+         // UI - Health
+         this.interface.health.children[0].innerHTML = `${basicHealth}%`;
+         this.interface.health.children[1].innerHTML = `${this.currentHealth} / ${this.maxHealth}`;
+ 
+         // UI - Health Bar
+         let healthBarWidth = basicHealth * 180 / 100;
+         this.interface.healthBar.children[0].style.width = `${healthBarWidth}px`;
     }
 }
 

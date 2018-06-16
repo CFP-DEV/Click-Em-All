@@ -120,6 +120,12 @@
                 height: 5px;
                 width: 180px;
                 background: $white;
+
+                span {
+                    display: block;
+                    height: 5px;
+                    background: $red;
+                }
             }
         }
 

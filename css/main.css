@@ -120,6 +120,10 @@ button:href {
       height: 5px;
       width: 180px;
       background: #FFFFFF; }
+      .game-content .monster__health__bar span {
+        display: block;
+        height: 5px;
+        background: #F20B5F; }
   .game-content .monster__name {
     height: 180px;
     width: 180px;
