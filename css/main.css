@@ -154,7 +154,8 @@ button:href {
   padding: 0; }
   .mine-content .miners-list__item {
     min-height: 80px;
-    display: flex; }
+    display: flex;
+    align-items: center; }
   .mine-content .miners-list .miner__info, .mine-content .miners-list .miner__quanity, .mine-content .miners-list .miner__income, .mine-content .miners-list .miner__cost {
     margin-right: 20px; }
     .mine-content .miners-list .miner__info div:nth-child(1), .mine-content .miners-list .miner__quanity div:nth-child(1), .mine-content .miners-list .miner__income div:nth-child(1), .mine-content .miners-list .miner__cost div:nth-child(1) {

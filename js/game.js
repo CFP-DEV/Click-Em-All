@@ -153,6 +153,17 @@ class Mine {
         // Append List
         document.getElementById('mineScene').appendChild(minersList);
     }
+
+    // Get Income
+    getIncome () {
+        let income = 0;
+
+        this.miners.forEach(miner => {
+            income += (miner.quanity * miner.income);
+        });
+
+        return income;
+    }
 }
 
 class Character {
@@ -496,6 +507,13 @@ class Game {
         // Create Mine
         this.mine = new Mine();
         this.mine.createMine();
+
+        // Income function
+        setInterval(() => {
+            this.player.increaseGold(this.mine.getIncome());
+
+            console.log(this.player.gold);
+        }, 1000);
 
         // Initialize UI
         this.initUI();
