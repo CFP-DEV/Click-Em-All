@@ -27,7 +27,14 @@ button:href {
   padding: 0 20px;
   display: flex;
   align-items: center;
-  justify-content: center; }
+  justify-content: center;
+  background: none;
+  color: inherit;
+  font: inherit;
+  border: none;
+  cursor: pointer; }
+  .btn:hover {
+    cursor: pointer; }
 
 .btn--is-outline {
   border: 2px solid #FFFFFF;
@@ -102,39 +109,43 @@ button:href {
 .footer-navigation {
   bottom: 40px; }
 
-.game-content {
+.game-content, .mine-content, .shop-content, .inventory-content {
   height: 100vh;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center; }
-  .game-content .monster__health {
-    margin-bottom: 20px; }
-    .game-content .monster__health__value {
-      font-size: 10px;
-      font-weight: 300;
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 5px; }
-    .game-content .monster__health__bar {
-      height: 5px;
-      width: 180px;
-      background: #FFFFFF; }
-      .game-content .monster__health__bar span {
-        display: block;
-        height: 5px;
-        background: #F20B5F; }
-  .game-content .monster__name {
-    height: 180px;
-    width: 180px;
-    border: 2px solid #FFFFFF;
+
+.mine-content, .shop-content, .inventory-content {
+  display: none; }
+
+.game-content .monster__health {
+  margin-bottom: 20px; }
+  .game-content .monster__health__value {
+    font-size: 10px;
+    font-weight: 300;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-content: center; }
-    .game-content .monster__name span {
-      width: 100%;
+    justify-content: space-between;
+    margin-bottom: 5px; }
+  .game-content .monster__health__bar {
+    height: 5px;
+    width: 180px;
+    background: #FFFFFF; }
+    .game-content .monster__health__bar span {
       display: block;
-      text-align: center; }
+      height: 5px;
+      background: #F20B5F; }
+.game-content .monster__name {
+  height: 180px;
+  width: 180px;
+  border: 2px solid #FFFFFF;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center; }
+  .game-content .monster__name span {
+    width: 100%;
+    display: block;
+    text-align: center; }
 
 /*# sourceMappingURL=main.css.map */

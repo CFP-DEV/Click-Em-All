@@ -67,19 +67,24 @@
     <!-- Navigation -->
     <ul class="navigation">
         <li class="navigation__item">
-            <a href="#" class="navigation__link btn btn--is-outline">
+            <button class="navigation__link btn btn--is-outline" id="inventory">
                 INVENTORY
-            </a>
+            </button>
         </li>
         <li class="navigation__item">
-            <a href="#" class="navigation__link btn btn--is-outline">
+            <button class="navigation__link btn btn--is-outline" id="mine">
+                MINE
+            </button>
+        </li>
+        <li class="navigation__item">
+            <button class="navigation__link btn btn--is-outline" id="shop">
                 321 <span class="text--is-yellow">GOLD</span>
-            </a>
+            </button>
         </li>
     </ul>
 
     <!-- Game -->
-    <div class="game-content">
+    <div class="game-content" id="gameScene">
         <!-- Monster -->
         <div class="monster">
             <div class="monster__health">
@@ -93,6 +98,21 @@
             </div>
             <div class="monster__name" id="monsterName"></div>
         </div>
+    </div>
+
+    <!-- Mine -->
+    <div class="mine-content" id="mineScene">
+        mine
+    </div>
+
+    <!-- Shop -->
+    <div class="shop-content" id="shopScene">
+        shop
+    </div>
+
+    <!-- Inventory -->
+    <div class="inventory-content" id="inventoryScene">
+        inventory
     </div>
 
 </body>

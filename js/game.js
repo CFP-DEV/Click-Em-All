@@ -222,6 +222,12 @@ class Player extends Character {
     }
 
     decreaseGold (amount) {
+        if (this.gold - amount <= 0) {
+            this.gold = 0;
+
+            return;
+        }
+
         this.gold -= amount;
     }
 
@@ -278,8 +284,10 @@ class Monster extends Character {
         super(config);
 
         // Generate Monster Name
+        this.monsterName = this.name;
         let monsterName = this.generateName(this.name);
         this.name = monsterName; 
+       
 
         // Rewards
         this.reward = config.reward;
@@ -339,6 +347,12 @@ class Monster extends Character {
         // Respawn
         this.currentHealth = this.maxHealth;
 
+        // New Name
+        this.name = this.generateName(this.monsterName);
+
+        // UI - Name
+        this.interface.name.innerHTML = this.name;
+
         // Update UI
         this.updateUI();
 
@@ -349,6 +363,26 @@ class Monster extends Character {
 }
 
 class Game {
+    constructor () {
+        // Interface
+        this.interface = {
+            inventory: document.getElementById('inventory'),
+            mine: document.getElementById('mine'),
+            shop: document.getElementById('shop'),
+        }
+
+        // Scenes
+        this.scenes = {
+            game: document.getElementById('gameScene'),
+            mine: document.getElementById('mineScene'),
+            shop: document.getElementById('shopScene'),
+            inventory: document.getElementById('inventoryScene'),
+        }
+
+        // Active Scene
+        this.activeScene = 'game';
+    }
+
     init () {
         // Create User
         let playerConfig = {
@@ -404,6 +438,50 @@ class Game {
             // Increase Experience
             this.player.inceaseExperience(e.detail.experience);
         });
+    
+        // Inventory
+        this.interface.inventory.addEventListener('click', (e) => {
+            this.closeScene();
+
+            // Show Inventory
+            this.activeScene = 'inventory';
+            this.scenes.inventory.style.display = 'flex';
+        });
+
+        // Mine
+        this.interface.mine.addEventListener('click', (e) => {
+            this.closeScene();
+
+            // Show Mine
+            this.activeScene = 'mine';
+            this.scenes.mine.style.display = 'flex';
+        });
+
+        // Shop
+        this.interface.shop.addEventListener('click', (e) => {
+            this.closeScene();
+
+            // Show Shop
+            this.activeScene = 'shop';
+            this.scenes.shop.style.display = 'flex';
+        });
+    }
+
+    closeScene () {
+        switch (this.activeScene) {
+            case 'game':
+                this.scenes.game.style.display = 'none';
+                break;
+            case 'mine':
+                this.scenes.mine.style.display = 'none';
+                break;
+            case 'shop':
+                this.scenes.shop.style.display = 'none';
+                break;
+            case 'inventory':
+                this.scenes.inventory.style.display = 'none';
+                break;
+        }
     }
 }
 

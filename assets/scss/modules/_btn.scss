@@ -4,6 +4,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    background: none;
+    color: inherit;
+    font: inherit;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 .btn--is-outline {
