@@ -148,4 +148,28 @@ button:href {
     display: block;
     text-align: center; }
 
+.mine-content .miners-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0; }
+  .mine-content .miners-list__item {
+    min-height: 80px;
+    display: flex; }
+  .mine-content .miners-list .miner__info, .mine-content .miners-list .miner__quanity, .mine-content .miners-list .miner__income, .mine-content .miners-list .miner__cost {
+    margin-right: 20px; }
+    .mine-content .miners-list .miner__info div:nth-child(1), .mine-content .miners-list .miner__quanity div:nth-child(1), .mine-content .miners-list .miner__income div:nth-child(1), .mine-content .miners-list .miner__cost div:nth-child(1) {
+      font-size: 14px; }
+    .mine-content .miners-list .miner__info div:nth-child(2), .mine-content .miners-list .miner__quanity div:nth-child(2), .mine-content .miners-list .miner__income div:nth-child(2), .mine-content .miners-list .miner__cost div:nth-child(2) {
+      font-size: 12px;
+      margin-top: 5px; }
+  .mine-content .miners-list .miner__info {
+    width: 200px; }
+    .mine-content .miners-list .miner__info__name {
+      font-size: 14px; }
+    .mine-content .miners-list .miner__info__description {
+      font-size: 12px;
+      margin-top: 5px; }
+  .mine-content .miners-list .miner__quanity, .mine-content .miners-list .miner__income, .mine-content .miners-list .miner__cost {
+    width: 100px; }
+
 /*# sourceMappingURL=main.css.map */

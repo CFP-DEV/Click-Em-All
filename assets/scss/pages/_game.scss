@@ -152,3 +152,48 @@
         }
     }
 }
+
+.mine-content {
+    .miners-list {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    
+        &__item {
+            min-height: 80px;
+            display: flex;
+        }
+
+        .miner {
+            &__info, &__quanity, &__income, &__cost {
+                margin-right: 20px;
+
+                div:nth-child(1) {
+                    font-size: 14px;
+                }
+
+                div:nth-child(2) {
+                    font-size: 12px;
+                    margin-top: 5px;
+                }
+            }
+
+            &__info {
+                width: 200px;
+
+                &__name {
+                    font-size: 14px;
+                }
+
+                &__description {
+                    font-size: 12px;
+                    margin-top: 5px;
+                }
+            }
+
+            &__quanity, &__income, &__cost {
+                width: 100px;
+            }
+        }
+    }
+}

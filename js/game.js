@@ -50,6 +50,9 @@ class Miner {
 
         // Quanity
         this.quanity = config.quanity || 0;
+
+        // Value
+        this.value = config.value || 50;
     }
 
     // Quanity Management
@@ -65,17 +68,90 @@ class Miner {
 
 class Mine {
     constructor () {
-        // Peon
-        this.peon = new Miner({ name: 'Peon', description: 'Me peon, me work.', income: 1, quanity: 0, value: 50 });
+        this.miners = [
+             // Peon
+            this.peon = new Miner({ name: 'Peon', description: 'Me peon, me work.', income: 1, quanity: 0, value: 50 }),
 
-        // Mine Cart
-        this.mineCart = new Miner({ name: 'Mine Cart', description: 'Not only for coal.', income: 5, quanity: 0, value: 250  });
+            // Mine Cart
+            this.mineCart = new Miner({ name: 'Mine Cart', description: 'Not only for coal.', income: 5, quanity: 0, value: 250  }),
 
-        // Drillers
-        this.drillers = new Miner({ name: 'Drillers', description: 'Do not confuse with dealers.', income: 10, quanity: 0, value: 500  });
+            // Drillers
+            this.drillers = new Miner({ name: 'Driller', description: 'Do not confuse with dealer.', income: 10, quanity: 0, value: 500  }),
 
-        // Senior Perons
-        this.seniorWorkers = new Miner({ name: 'Senior Peons', description: 'Me smart, me earns a lot, me the best.', income: 50, quanity: 0, value: 2500 });
+            // Senior Perons
+            this.seniorWorkers = new Miner({ name: 'Senior Peon', description: 'Me smart, me earns a lot, me the best.', income: 50, quanity: 0, value: 2500 })
+        ];
+       
+    }
+
+    // Create Mine
+    createMine () {
+        // Reset DOM
+        document.getElementById('mineScene').innerHTML = '';
+
+        // Create Update DOM
+        let minersList = document.createElement('ul');
+        minersList.classList.add('miners-list');
+
+        // List Miners
+        this.miners.forEach(miner => {
+            // DOM Element
+            let minerElement = document.createElement('li');
+            minerElement.classList.add('miners-list__item');
+            minerElement.classList.add('miner');
+
+            // Content
+            minerElement.innerHTML = `
+                <div class="miner__info">
+                    <div class="miner__info__name">
+                        ${miner.name}
+                    </div>
+                    <div class="miner__info__description">
+                        ${miner.description}
+                    </div>
+                </div>
+                <div class="miner__quanity">
+                    <div>
+                        Hired
+                    </div>
+                    <div>
+                        ${miner.quanity}
+                    </div>
+                </div>
+                <div class="miner__income">
+                    <div>
+                        Income
+                    </div>
+                    <div>
+                        ${miner.income}
+                    </div>
+                </div>
+                <div class="miner__cost">
+                    <div>
+                        Cost
+                    </div>
+                    <div>
+                        ${miner.value}
+                    </div>
+                </div>
+                <button class="miner__action btn btn--is-outline">
+                    BUY
+                </button>
+            `;
+
+            // Action Bind
+            minerElement.children[minerElement.children.length - 1].addEventListener('click', (e) => {
+                miner.increaseQuanity();
+
+                this.createMine();
+            });
+
+            // Append
+            minersList.appendChild(minerElement);
+        });
+
+        // Append List
+        document.getElementById('mineScene').appendChild(minersList);
     }
 }
 
@@ -366,6 +442,7 @@ class Game {
     constructor () {
         // Interface
         this.interface = {
+            game: document.getElementById('game'),
             inventory: document.getElementById('inventory'),
             mine: document.getElementById('mine'),
             shop: document.getElementById('shop'),
@@ -416,6 +493,10 @@ class Game {
         // Create Store
         this.store = new Store();
 
+        // Create Mine
+        this.mine = new Mine();
+        this.mine.createMine();
+
         // Initialize UI
         this.initUI();
     }
@@ -437,6 +518,15 @@ class Game {
 
             // Increase Experience
             this.player.inceaseExperience(e.detail.experience);
+        });
+
+        // Game (Fight)
+        this.interface.game.addEventListener('click', (e) => {
+            this.closeScene();
+
+            // Show Game
+            this.activeScene = 'game';
+            this.scenes.game.style.display = 'flex';
         });
     
         // Inventory
