@@ -390,6 +390,15 @@ class Player extends Character {
         this.inventory.push(item);
     }
 
+    fromInventory (itemID) {
+        if (!itemID && itemID !== 0) {
+            return;
+        }
+
+        // Remove from Inventory
+        this.inventory.splice(itemID, 1);
+    }
+
     getInventory () {
         return this.inventory;
     }
@@ -581,6 +590,9 @@ class Game {
         // Inventory
         this.interface.inventory.addEventListener('click', (e) => {
             this.closeScene();
+
+            // Refresh Inventory
+            this.createInventory();
 
             // Show Inventory
             this.activeScene = 'inventory';
@@ -782,6 +794,9 @@ class Game {
             // Display Message
             let message = document.createElement('div');
             message.innerHTML = 'Your inventory is empty.';
+
+            // Append Message
+            document.getElementById('inventoryScene').appendChild(message);
 
             return;
         }
