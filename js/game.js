@@ -73,85 +73,14 @@ class Mine {
             this.peon = new Miner({ name: 'Peon', description: 'Me peon, me work.', income: 1, quanity: 0, value: 50 }),
 
             // Mine Cart
-            this.mineCart = new Miner({ name: 'Mine Cart', description: 'Not only for coal.', income: 5, quanity: 0, value: 250  }),
+            this.mineCart = new Miner({ name: 'Mine Cart', description: 'Straight outta minecraft.', income: 5, quanity: 0, value: 250  }),
 
             // Drillers
-            this.drillers = new Miner({ name: 'Driller', description: 'Do not confuse with dealer.', income: 10, quanity: 0, value: 500  }),
+            this.driller = new Miner({ name: 'Driller', description: 'Do not confuse with dealer.', income: 10, quanity: 0, value: 500  }),
 
-            // Senior Perons
-            this.seniorWorkers = new Miner({ name: 'Senior Peon', description: 'Me smart, me earns a lot, me the best.', income: 50, quanity: 0, value: 2500 })
-        ];
-       
-    }
-
-    // Create Mine
-    createMine () {
-        // Reset DOM
-        document.getElementById('mineScene').innerHTML = '';
-
-        // Create Update DOM
-        let minersList = document.createElement('ul');
-        minersList.classList.add('miners-list');
-
-        // List Miners
-        this.miners.forEach(miner => {
-            // DOM Element
-            let minerElement = document.createElement('li');
-            minerElement.classList.add('miners-list__item');
-            minerElement.classList.add('miner');
-
-            // Content
-            minerElement.innerHTML = `
-                <div class="miner__info">
-                    <div class="miner__info__name">
-                        ${miner.name}
-                    </div>
-                    <div class="miner__info__description">
-                        ${miner.description}
-                    </div>
-                </div>
-                <div class="miner__quanity">
-                    <div>
-                        Hired
-                    </div>
-                    <div>
-                        ${miner.quanity}
-                    </div>
-                </div>
-                <div class="miner__income">
-                    <div>
-                        Income
-                    </div>
-                    <div>
-                        ${miner.income}
-                    </div>
-                </div>
-                <div class="miner__cost">
-                    <div>
-                        Cost
-                    </div>
-                    <div>
-                        ${miner.value}
-                    </div>
-                </div>
-                <button class="miner__action btn btn--is-outline">
-                    BUY
-                </button>
-            `;
-
-            // Action Bind
-            minerElement.children[minerElement.children.length - 1].addEventListener('click', (e) => {
-                miner.increaseQuanity();
-
-                this.createMine();
-            });
-
-            // Append
-            minersList.appendChild(minerElement);
-        });
-
-        // Append List
-        document.getElementById('mineScene').appendChild(minersList);
+            // Senior Peons
+            this.seniorPeon = new Miner({ name: 'Senior Peon', description: 'Me smart, me earns a lot, me the best.', income: 50, quanity: 0, value: 2500 })
+        ];  
     }
 
     // Get Income
@@ -163,6 +92,11 @@ class Mine {
         });
 
         return income;
+    }
+
+    // Get Miners
+    getMiners () {
+        return this.miners;
     }
 }
 
@@ -278,6 +212,7 @@ class Player extends Character {
             experienceBar: document.getElementById('playerExperienceBar'),
             health: document.getElementById('playerHealth'),
             healthBar: document.getElementById('playerHealthBar'),
+            gold: document.getElementById('shop'),
         }
 
         // UI - Name
@@ -306,16 +241,30 @@ class Player extends Character {
     // Gold
     increaseGold (amount) {
         this.gold += amount;
+
+        this.updateGoldUI();
     }
 
     decreaseGold (amount) {
         if (this.gold - amount <= 0) {
             this.gold = 0;
-
-            return;
+        } else {
+            this.gold -= amount;
         }
 
-        this.gold -= amount;
+        this.updateGoldUI();
+    }
+
+    checkGold (amount) {
+        if (amount > this.gold) {
+            return false;
+        }
+
+        return true;
+    }
+
+    updateGoldUI () {
+        this.interface.gold.innerHTML = `${this.gold} <span class="text--is-yellow">GOLD</span>`;
     }
 
     // Level
@@ -506,14 +455,12 @@ class Game {
 
         // Create Mine
         this.mine = new Mine();
-        this.mine.createMine();
+        this.createMine();
 
         // Income function
         setInterval(() => {
             this.player.increaseGold(this.mine.getIncome());
-
-            console.log(this.player.gold);
-        }, 1000);
+        }, 10000);
 
         // Initialize UI
         this.initUI();
@@ -590,6 +537,83 @@ class Game {
                 this.scenes.inventory.style.display = 'none';
                 break;
         }
+    }
+
+    // Create Mine
+    createMine () {
+        // Reset DOM
+        document.getElementById('mineScene').innerHTML = '';
+
+        // Create Update DOM
+        let minersList = document.createElement('ul');
+        minersList.classList.add('miners-list');
+
+        // List Miners
+        this.mine.getMiners().forEach(miner => {
+            // DOM Element
+            let minerElement = document.createElement('li');
+            minerElement.classList.add('miners-list__item');
+            minerElement.classList.add('miner');
+
+            // Content
+            minerElement.innerHTML = `
+                <div class="miner__info">
+                    <div class="miner__info__name">
+                        ${miner.name}
+                    </div>
+                    <div class="miner__info__description">
+                        ${miner.description}
+                    </div>
+                </div>
+                <div class="miner__quanity">
+                    <div>
+                        Hired
+                    </div>
+                    <div>
+                        ${miner.quanity}
+                    </div>
+                </div>
+                <div class="miner__income">
+                    <div>
+                        Income
+                    </div>
+                    <div>
+                        ${miner.income}
+                    </div>
+                </div>
+                <div class="miner__cost">
+                    <div>
+                        Cost
+                    </div>
+                    <div>
+                        ${miner.value}
+                    </div>
+                </div>
+                <button class="miner__action btn btn--is-outline">
+                    BUY
+                </button>
+            `;
+
+            // Action Bind
+            minerElement.children[minerElement.children.length - 1].addEventListener('click', (e) => {
+                // Check if players has enough gold
+                if (!this.player.checkGold(miner.value)) {
+                    console.log('Not enough gold.')
+
+                    return;
+                }
+
+                miner.increaseQuanity();
+
+                this.createMine();
+            });
+
+            // Append
+            minersList.appendChild(minerElement);
+        });
+
+        // Append List
+        document.getElementById('mineScene').appendChild(minersList);
     }
 }
 
