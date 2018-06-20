@@ -340,6 +340,15 @@ class Player extends Character {
         // Increase Maximum Experience
         this.maxExperience *= 2;
 
+        // Increase Maximum Health
+        this.maxHealth = Math.floor(this.maxHealth * 1.5);
+
+        // Restore Health
+        this.currentHealth = this.maxHealth;
+
+        // Increase Damage
+        this.increaseDamage(2);
+
         // Update UI
         this.interface.level.innerHTML = this.level;
 
@@ -527,8 +536,8 @@ class Game {
         // Create Enemy
         let enemyConfig = {
             name: 'Orc',
-            currentHealth: 100,
-            maxHealth: 100,
+            currentHealth: 80,
+            maxHealth: 80,
             armor: 0,
             damage: 5,
             reward: {
