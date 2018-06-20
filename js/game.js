@@ -267,6 +267,9 @@ class Player extends Character {
         // Gold
         this.gold = config.gold;
 
+        // Total Gold
+        this.totalGold = this.gold;
+
         // Inventory
         this.inventory = [];
 
@@ -307,6 +310,7 @@ class Player extends Character {
     // Gold
     increaseGold (amount) {
         this.gold += amount;
+        this.totalGold += amount;
 
         this.updateGoldUI();
     }
@@ -386,7 +390,14 @@ class Player extends Character {
 
     // Death
     onDeath () {
-        console.log('GAME OVER');
+        let onDeath = new CustomEvent('onDeath', {
+            detail: {
+                level: this.level,
+                totalGold: this.totalGold,
+            }
+        });
+
+        document.dispatchEvent(onDeath);
     }
 
     // Inventory
@@ -498,12 +509,20 @@ class Monster extends Character {
 
 class Game {
     constructor () {
+        // Profiles
+        this.profiles = ['CFP'];
+
         // Interface
         this.interface = {
             game: document.getElementById('game'),
             inventory: document.getElementById('inventory'),
             mine: document.getElementById('mine'),
             shop: document.getElementById('shop'),
+            changeProfile: document.getElementById('changeProfile'),
+            newProfile: document.getElementById('newProfile'),
+            profile: document.getElementById('profile'),
+            navigation: document.getElementById('navigation'),
+            footerNavigation: document.getElementById('footerNavigation')
         }
 
         // Scenes
@@ -512,16 +531,29 @@ class Game {
             mine: document.getElementById('mineScene'),
             shop: document.getElementById('shopScene'),
             inventory: document.getElementById('inventoryScene'),
+            death: document.getElementById('deathScene'),
+            profileSelection: document.getElementById('profileSelectionScene'),
         }
 
         // Active Scene
         this.activeScene = 'game';
     }
 
-    init () {
+    init (profileName) {
+        // Hide Profile Selection
+        this.closeScene();
+
+        this.activeScene = 'game';
+        this.scenes.game.style.display = 'flex';
+
+        // Show UI
+        this.interface.profile.style.display = 'flex';
+        this.interface.navigation.style.display = 'flex';
+        this.interface.footerNavigation.style.display = 'flex';
+
         // Create User
         let playerConfig = {
-            name: 'CFP',
+            name: profileName,
             level: 1,
             currentHealth: 100,
             maxHealth: 100,
@@ -587,6 +619,17 @@ class Game {
             this.player.inceaseExperience(e.detail.experience);
         });
 
+        // Player Death
+        document.addEventListener('onDeath', (e) => {
+            this.closeScene();
+
+            // Save Score
+
+            // Show Death Screen
+            this.activeScene = 'death';
+            this.scenes.death.style.display = 'flex';
+        });
+
         // Game (Fight)
         this.interface.game.addEventListener('click', (e) => {
             this.closeScene();
@@ -625,6 +668,23 @@ class Game {
             this.activeScene = 'shop';
             this.scenes.shop.style.display = 'flex';
         });
+
+        // Profile Selection
+        this.interface.changeProfile.addEventListener('click', (e) => {
+            this.closeScene();
+
+            // Show Shop
+            this.activeScene = 'profileSelection';
+            this.scenes.profileSelection.style.display = 'flex';
+        });
+
+        this.interface.newProfile.addEventListener('click', (e) => {
+            this.closeScene();
+
+            // Show Shop
+            this.activeScene = 'profileSelection';
+            this.scenes.profileSelection.style.display = 'flex';
+        });
     }
 
     closeScene () {
@@ -640,6 +700,12 @@ class Game {
                 break;
             case 'inventory':
                 this.scenes.inventory.style.display = 'none';
+                break;
+            case 'death':
+                this.scenes.death.style.display = 'none';
+                break;
+            case 'profileSelection':
+                this.scenes.profileSelection.style.display = 'none';
                 break;
         }
     }
@@ -851,9 +917,76 @@ class Game {
         // Append List
         document.getElementById('inventoryScene').appendChild(itemList);
    }
+
+   initProfileSelection () {
+        // List Profiles
+        this.showProfiles();
+
+        // New Profile
+        let profileName = document.getElementById('profileName');
+
+        document.getElementById('createProfile').addEventListener('click', (e) => {
+            // Validate
+            if (profileName.value.length === 0 || profileName.value.length >= 16) {
+                return;
+            }
+            
+            // Check if profile name is available
+            let isAvailable = true;
+            this.profiles.forEach(profile => {
+                if (profile.name === profileName) {
+                    isAvailable = false;
+                }
+            });
+
+            if (!isAvailable) {
+                return;
+            }
+
+            // Create Profile
+            this.profiles.push(profileName.value);
+
+            // Reset Form
+            profileName.value = '';
+            
+            // Refresh List
+            this.showProfiles();
+        });
+   }
+
+   showProfiles () {
+        // Profile List
+        let profileList = document.getElementById('profile-list');
+
+        // Reset DOM
+        profileList.innerHTML = '';
+
+        this.profiles.forEach(profile => {
+            // Create Element
+            let profileElement = document.createElement('li');
+            profileElement.classList.add('profile-list__profile');
+
+            // Set Content
+            profileElement.innerHTML = `
+                <div class="profile-list__profile__name">
+                    ${profile}
+                </div>
+                <button class="profile-list__profile__run btn btn--is-outline">
+                    RUN
+                </button>
+            `;
+
+            // Event Listener
+            profileElement.children[profileElement.children.length - 1].addEventListener('click', (e) => {
+                this.init(profile)
+            });
+
+            profileList.appendChild(profileElement);
+        });
+   }
 }
 
 window.onload = function () {
     const Clicker = new Game();
-    Clicker.init();
+    Clicker.initProfileSelection();
 }

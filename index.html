@@ -19,7 +19,7 @@
 <body>
     
     <!-- Profile -->
-    <div class="profile">
+    <div class="profile" id="profile">
         <!-- Avatar -->
         <div class="profile__avatar" id="playerLevel">
             
@@ -51,16 +51,16 @@
     </div>
 
     <!-- Footer Navigation -->
-    <ul class="footer-navigation">
+    <ul class="footer-navigation" id="footerNavigation">
         <li class="footer-navigation__item">
-            <button class="footer-navigation__link btn btn--is-outline">
+            <button class="footer-navigation__link btn btn--is-outline" id="changeProfile">
                 CHANGE PROFILE
             </button>
         </li>
     </ul>
 
     <!-- Navigation -->
-    <ul class="navigation">
+    <ul class="navigation" id="navigation">
         <li class="navigation__item">
             <button class="navigation__link btn btn--is-outline" id="game">
                 FIGHT
@@ -113,5 +113,33 @@
         inventory
     </div>
 
+    <!-- Game Over -->
+    <div class="death-content" id="deathScene">
+        <h1 class="death-content__header">Game Over</h1>
+        <button class="death-content__new-profile btn btn--is-outline" id="newProfile">
+            New Profile
+        </button>
+    </div>
+
+    <!-- Profile Selection -->
+    <div class="profile-selection" id="profileSelectionScene">
+        <!-- Header -->
+        <header class="header">
+            <h3 class="header__title">
+                Select Profile
+            </h3>
+        </header>
+
+        <!-- Profile List -->
+        <ul class="profile-list" id="profile-list"></ul>
+
+        <!-- New Profile -->
+        <div class="new-profile">
+            <input type="text" class="new-profile__name" id="profileName">
+            <button class="new-profile__create-profile btn btn--is-outline" id="createProfile">
+                Create
+            </button>
+        </div>
+    </div>
 </body>
 </html>

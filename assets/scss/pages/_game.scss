@@ -11,7 +11,7 @@
 }
 
 .profile {
-    display: flex;
+    display: none;
 
     &__avatar, &__info {
         height: 80px;
@@ -77,7 +77,7 @@
 .navigation, .footer-navigation {
     margin: 0;
     padding: 0;
-    display: flex;
+    display: none;
     list-style-type: none;
 
     &__item {
@@ -97,7 +97,7 @@
     bottom: 40px;
 }
 
-.game-content, .mine-content, .shop-content, .inventory-content {
+.game-content, .mine-content, .shop-content, .inventory-content, .death-content, .profile-selection {
     height: 100vh;
     width: 100%;
     display: flex;
@@ -105,7 +105,7 @@
     justify-content: center;
 }
 
-.mine-content, .shop-content, .inventory-content {
+.game-content, .mine-content, .shop-content, .inventory-content, .death-content {
     display: none;
 }
 
@@ -195,6 +195,68 @@
             &__quanity, &__income, &__cost {
                 width: 100px;
             }
+        }
+    }
+}
+
+.death-content {
+    flex-wrap: wrap;
+    align-content: center;
+
+    &__header {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+.profile-selection {
+    flex-wrap: wrap;
+    align-content: center;
+
+    .header {
+        width: 100%;
+        text-align: center;
+
+        &__title {
+            font-size: 24px;
+        }
+    }
+
+    .profile-list {
+        margin: 30px 0;
+        list-style-type: none;
+        padding: 0;
+
+        &__profile {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+
+            &__name {
+                width: 200px;
+            }
+
+            &__run {
+                margin-left: 20px;
+            }
+        }
+    }
+
+    .new-profile {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+
+        &__name {
+            height: 60px;
+            width: 220px;
+            background: darken($dark, 3%);
+            margin-right: 10px;
+            border: none;
+            color: $white;
+            font: inherit;
+            font-size: 12px;
+            padding: 0 10px;
         }
     }
 }

@@ -22,6 +22,9 @@ button,
 button:href {
   cursor: pointer; }
 
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400; }
+
 .btn {
   height: 60px;
   padding: 0 20px;
@@ -59,7 +62,7 @@ button:href {
   top: 40px; }
 
 .profile {
-  display: flex; }
+  display: none; }
   .profile__avatar, .profile__info {
     height: 80px; }
   .profile__avatar {
@@ -96,7 +99,7 @@ button:href {
 .navigation, .footer-navigation {
   margin: 0;
   padding: 0;
-  display: flex;
+  display: none;
   list-style-type: none; }
   .navigation__item, .footer-navigation__item {
     margin-right: 20px; }
@@ -109,14 +112,14 @@ button:href {
 .footer-navigation {
   bottom: 40px; }
 
-.game-content, .mine-content, .shop-content, .inventory-content {
+.game-content, .mine-content, .shop-content, .inventory-content, .death-content, .profile-selection {
   height: 100vh;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center; }
 
-.mine-content, .shop-content, .inventory-content {
+.game-content, .mine-content, .shop-content, .inventory-content, .death-content {
   display: none; }
 
 .game-content .monster__health {
@@ -172,5 +175,47 @@ button:href {
       margin-top: 5px; }
   .mine-content .miners-list .miner__quanity, .mine-content .miners-list .miner__income, .mine-content .miners-list .miner__cost {
     width: 100px; }
+
+.death-content {
+  flex-wrap: wrap;
+  align-content: center; }
+  .death-content__header {
+    width: 100%;
+    text-align: center; }
+
+.profile-selection {
+  flex-wrap: wrap;
+  align-content: center; }
+  .profile-selection .header {
+    width: 100%;
+    text-align: center; }
+    .profile-selection .header__title {
+      font-size: 24px; }
+  .profile-selection .profile-list {
+    margin: 30px 0;
+    list-style-type: none;
+    padding: 0; }
+    .profile-selection .profile-list__profile {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px; }
+      .profile-selection .profile-list__profile__name {
+        width: 200px; }
+      .profile-selection .profile-list__profile__run {
+        margin-left: 20px; }
+  .profile-selection .new-profile {
+    width: 100%;
+    display: flex;
+    justify-content: center; }
+    .profile-selection .new-profile__name {
+      height: 60px;
+      width: 220px;
+      background: #0b0e12;
+      margin-right: 10px;
+      border: none;
+      color: #FFFFFF;
+      font: inherit;
+      font-size: 12px;
+      padding: 0 10px; }
 
 /*# sourceMappingURL=main.css.map */
