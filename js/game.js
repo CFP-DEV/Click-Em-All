@@ -9,6 +9,10 @@ class Item {
         // Value
         this.value = config.value || 1;
     }
+
+    use (player) {
+        console.log('Wow, this item is really useless.');
+    }
 }
 
 class Potion extends Item {
@@ -18,22 +22,63 @@ class Potion extends Item {
         // Health Value
         this.healthValue = config.healthValue;
     }
+
+    use (player) {
+        player.increaseCurrentHealth(this.healthValue);
+    }
+}
+
+class BookOfDamage extends Item {
+    constructor (config) {
+        super (config);
+
+        // Damage
+        this.damageValue = config.damageValue;
+    }
+
+    use (player) {
+        player.increaseDamage(this.damageValue);
+    }
+}
+
+class BookOfArmor extends Item {
+    constructor (config) {
+        super (config);
+
+        // Armor
+        this.armorValue = config.armorValue;
+    }
+
+    use (player) {
+        player.increaseArmor(this.armorValue);
+    }
 }
 
 class Store {
     constructor () {
         this.offer = [
             new Potion({ name: 'Health Potion', description: 'Restore your health (50).', value: 20, healthValue: 50}),
+            new Potion({ name: 'Health Potion', description: 'Restore your health (50).', value: 80, healthValue: 250}),
+            new Potion({ name: 'Health Potion', description: 'Restore your health (50).', value: 140, healthValue: 500}),
+            new BookOfDamage({ name: 'Book of Damage', description: 'Increases your damage (+5).', value: 100, damageValue: 5}),
+            new BookOfArmor({ name: 'Book of Armor', description: 'Increases your armor (+5).', value: 100, armorValue: 5})
         ];
     }
 
     // Pucharse
     pucharse (itemID) {
-        if (!itemID || !this.offer[itemID]) {
-            return false;
+        if (!itemID && itemID !== 0) {
+            if (!this.offer[itemID]) {
+                return false;
+            }
         }
 
         return this.offer[itemID];
+    }
+
+    // Get Offer
+    getOffer () {
+        return this.offer;
     }
 }
 
@@ -175,6 +220,27 @@ class Character {
         this.armor -= armor;
     }
 
+    // Damage
+    increaseDamage (amount) {
+        this.damage += amount;
+    }
+
+    decreaseDamage (amount) {
+        this.damage -= amount;
+    }
+
+    // Current Health
+    // TODO: Weaken effect decreases amount of healing.
+    increaseCurrentHealth (amount) {
+        if (this.currentHealth + amount > this.maxHealth) {
+            this.currentHealth = this.maxHealth;
+        } else {
+            this.currentHealth += amount;
+        }
+
+        this.updateUI();
+    }
+
     // Set Weaken
     setWeaken (time) {
         // Clear
@@ -312,6 +378,20 @@ class Player extends Character {
     // Death
     onDeath () {
         console.log('GAME OVER');
+    }
+
+    // Inventory
+    toInventory (item) {
+        if (!item) {
+            return;
+        }
+
+        // Add to Inventory
+        this.inventory.push(item);
+    }
+
+    getInventory () {
+        return this.inventory;
     }
 }
 
@@ -452,10 +532,14 @@ class Game {
 
         // Create Store
         this.store = new Store();
+        this.createStore();
 
         // Create Mine
         this.mine = new Mine();
         this.createMine();
+
+        // Create Inventory
+        this.createInventory();
 
         // Income function
         setInterval(() => {
@@ -603,8 +687,13 @@ class Game {
                     return;
                 }
 
+                // Decreasee Gold
+                this.player.decreaseGold(miner.value);
+
+                // Increase Quanity
                 miner.increaseQuanity();
 
+                // Rerender
                 this.createMine();
             });
 
@@ -615,6 +704,129 @@ class Game {
         // Append List
         document.getElementById('mineScene').appendChild(minersList);
     }
+
+    // Create Shop
+    createStore () {
+         // Reset DOM
+         document.getElementById('shopScene').innerHTML = '';
+
+         // Create Update DOM
+         let itemList = document.createElement('ul');
+         itemList.classList.add('item-list');
+ 
+         // List Miners
+         this.store.getOffer().forEach((item, itemID) => {
+             // DOM Element
+             let itemElement = document.createElement('li');
+             itemElement.classList.add('item-list__item');
+             itemElement.classList.add('item');
+ 
+             // Content
+             itemElement.innerHTML = `
+                 <div class="item__info">
+                     <div class="item__info__name">
+                         ${item.name}
+                     </div>
+                     <div class="item__info__description">
+                         ${item.description}
+                     </div>
+                 </div>
+                 <div class="item__cost">
+                     <div>
+                         Cost
+                     </div>
+                     <div>
+                         ${item.value}
+                     </div>
+                 </div>
+                 <button class="item__action btn btn--is-outline">
+                     BUY
+                 </button>
+             `;
+ 
+             // Action Bind
+             itemElement.children[itemElement.children.length - 1].addEventListener('click', (e) => {
+                 // Check if players has enough gold
+                 if (!this.player.checkGold(item.value)) {
+                     console.log('Not enough gold.')
+ 
+                     return;
+                 }
+ 
+                 // Decreasee Gold
+                 this.player.decreaseGold(item.value);
+ 
+                 // Increase Quanity
+                 this.player.toInventory(this.store.pucharse(itemID));
+             });
+ 
+             // Append
+             itemList.appendChild(itemElement);
+         });
+ 
+         // Append List
+         document.getElementById('shopScene').appendChild(itemList);
+    }
+
+    // Create Shop
+    createInventory () {
+        // Reset DOM
+        document.getElementById('inventoryScene').innerHTML = '';
+
+        // Create Update DOM
+        let itemList = document.createElement('ul');
+        itemList.classList.add('item-list');
+
+        // List Miners
+        if (this.player.getInventory().length === 0) {
+            // Display Message
+            let message = document.createElement('div');
+            message.innerHTML = 'Your inventory is empty.';
+
+            return;
+        }
+
+        // Display Inventory
+        this.player.getInventory().forEach((item, itemID) => {
+            // DOM Element
+            let itemElement = document.createElement('li');
+            itemElement.classList.add('item-list__item');
+            itemElement.classList.add('item');
+
+            // Content
+            itemElement.innerHTML = `
+                <div class="item__info">
+                    <div class="item__info__name">
+                        ${item.name}
+                    </div>
+                    <div class="item__info__description">
+                        ${item.description}
+                    </div>
+                </div>
+                <button class="item__action btn btn--is-outline">
+                    USE
+                </button>
+            `;
+
+            // Action Bind
+            itemElement.children[itemElement.children.length - 1].addEventListener('click', (e) => {
+                // Use Item
+                item.use(this.player);
+
+                // Increase Quanity
+                this.player.fromInventory(itemID);
+
+                // Rerender
+                this.createInventory();
+            });
+
+            // Append
+            itemList.appendChild(itemElement);
+        });
+
+        // Append List
+        document.getElementById('inventoryScene').appendChild(itemList);
+   }
 }
 
 window.onload = function () {
