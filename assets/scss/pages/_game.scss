@@ -97,7 +97,7 @@
     bottom: 40px;
 }
 
-.game-content, .mine-content, .shop-content, .inventory-content, .death-content, .profile-selection {
+.game-content, .mine-content, .shop-content, .inventory-content, .death-content, .profile-selection, .highscores {
     height: 100vh;
     width: 100%;
     display: flex;
@@ -105,7 +105,7 @@
     justify-content: center;
 }
 
-.game-content, .mine-content, .shop-content, .inventory-content, .death-content {
+.game-content, .mine-content, .shop-content, .inventory-content, .death-content, .highscores {
     display: none;
 }
 
@@ -209,7 +209,7 @@
     }
 }
 
-.profile-selection {
+.profile-selection, .highscores {
     flex-wrap: wrap;
     align-content: center;
 

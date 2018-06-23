@@ -112,14 +112,14 @@ h1, h2, h3, h4, h5, h6 {
 .footer-navigation {
   bottom: 40px; }
 
-.game-content, .mine-content, .shop-content, .inventory-content, .death-content, .profile-selection {
+.game-content, .mine-content, .shop-content, .inventory-content, .death-content, .profile-selection, .highscores {
   height: 100vh;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center; }
 
-.game-content, .mine-content, .shop-content, .inventory-content, .death-content {
+.game-content, .mine-content, .shop-content, .inventory-content, .death-content, .highscores {
   display: none; }
 
 .game-content .monster__health {
@@ -183,31 +183,31 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
     text-align: center; }
 
-.profile-selection {
+.profile-selection, .highscores {
   flex-wrap: wrap;
   align-content: center; }
-  .profile-selection .header {
+  .profile-selection .header, .highscores .header {
     width: 100%;
     text-align: center; }
-    .profile-selection .header__title {
+    .profile-selection .header__title, .highscores .header__title {
       font-size: 24px; }
-  .profile-selection .profile-list {
+  .profile-selection .profile-list, .highscores .profile-list {
     margin: 30px 0;
     list-style-type: none;
     padding: 0; }
-    .profile-selection .profile-list__profile {
+    .profile-selection .profile-list__profile, .highscores .profile-list__profile {
       display: flex;
       align-items: center;
       margin-bottom: 20px; }
-      .profile-selection .profile-list__profile__name {
+      .profile-selection .profile-list__profile__name, .highscores .profile-list__profile__name {
         width: 200px; }
-      .profile-selection .profile-list__profile__run {
+      .profile-selection .profile-list__profile__run, .highscores .profile-list__profile__run {
         margin-left: 20px; }
-  .profile-selection .new-profile {
+  .profile-selection .new-profile, .highscores .new-profile {
     width: 100%;
     display: flex;
     justify-content: center; }
-    .profile-selection .new-profile__name {
+    .profile-selection .new-profile__name, .highscores .new-profile__name {
       height: 60px;
       width: 220px;
       background: #0b0e12;

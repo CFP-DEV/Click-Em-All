@@ -584,7 +584,8 @@ class Game {
             newProfile: document.getElementById('newProfile'),
             profile: document.getElementById('profile'),
             navigation: document.getElementById('navigation'),
-            footerNavigation: document.getElementById('footerNavigation')
+            footerNavigation: document.getElementById('footerNavigation'),
+            highscores: document.getElementById('highscores'),
         }
 
         // Scenes
@@ -595,6 +596,7 @@ class Game {
             inventory: document.getElementById('inventoryScene'),
             death: document.getElementById('deathScene'),
             profileSelection: document.getElementById('profileSelectionScene'),
+            highscores: document.getElementById('highscoresScene'),
         }
 
         // Active Scene
@@ -804,7 +806,7 @@ class Game {
         this.interface.changeProfile.addEventListener('click', (e) => {
             this.closeScene();
 
-            // Show Shop
+            // Show Profile Selection
             this.activeScene = 'profileSelection';
             this.scenes.profileSelection.style.display = 'flex';
 
@@ -815,11 +817,25 @@ class Game {
         this.interface.newProfile.addEventListener('click', (e) => {
             this.closeScene();
 
-            // Show Shop
+            // Show Profile Selection
             this.activeScene = 'profileSelection';
             this.scenes.profileSelection.style.display = 'flex';
 
             // Save
+            this.saveProfile();
+        });
+
+        this.interface.highscores.addEventListener('click', (e) => {
+            this.closeScene();
+
+            // Update Scores
+            this.showScores();
+
+            // Show Scores
+            this.activeScene ='highscores';
+            this.scenes.highscores.style.display = 'flex';
+
+            // Save Profile
             this.saveProfile();
         });
     }
@@ -843,6 +859,9 @@ class Game {
                 break;
             case 'profileSelection':
                 this.scenes.profileSelection.style.display = 'none';
+                break;
+            case 'highscores':
+                this.scenes.highscores.style.display = 'none';
                 break;
         }
     }
@@ -1154,6 +1173,32 @@ class Game {
             profileList.appendChild(profileElement);
         });
    }
+
+   showScores () {
+    // Profile List
+    let scoresList = document.getElementById('scores-list');
+
+    // Reset DOM
+    scoresList.innerHTML = '';
+
+    JSON.parse(localStorage.getItem('profiles')).forEach(profile => {
+        // Create Element
+        let profileElement = document.createElement('li');
+        profileElement.classList.add('profile-list__profile');
+
+        // Set Content
+        profileElement.innerHTML = `
+            <div class="profile-list__profile__name">
+                ${profile.name}
+            </div>
+            <div class="profile-list__profile__score">
+                TOTAL GOLD: ${profile.totalGold}
+            </div>
+        `;
+
+        scoresList.appendChild(profileElement);
+    });
+}
 }
 
 window.onload = function () {
