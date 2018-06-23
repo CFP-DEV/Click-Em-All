@@ -8,6 +8,9 @@ class Item {
 
         // Value
         this.value = config.value || 1;
+
+        // Item ID
+        this.itemID = config.itemID;
     }
 
     use (player) {
@@ -57,11 +60,11 @@ class BookOfArmor extends Item {
 class Store {
     constructor () {
         this.offer = [
-            new Potion({ name: 'Health Potion', description: 'Restore your health (50).', value: 20, healthValue: 50}),
-            new Potion({ name: 'Health Potion', description: 'Restore your health (50).', value: 80, healthValue: 250}),
-            new Potion({ name: 'Health Potion', description: 'Restore your health (50).', value: 140, healthValue: 500}),
-            new BookOfDamage({ name: 'Book of Damage', description: 'Increases your damage (+5).', value: 100, damageValue: 5}),
-            new BookOfArmor({ name: 'Book of Armor', description: 'Increases your armor (+5).', value: 100, armorValue: 5})
+            new Potion({ itemID: 1, name: 'Health Potion', description: 'Restore your health (50).', value: 20, healthValue: 50}),
+            new Potion({ itemID: 2, name: 'Health Potion', description: 'Restore your health (50).', value: 80, healthValue: 250}),
+            new Potion({ itemID: 3, name: 'Health Potion', description: 'Restore your health (50).', value: 140, healthValue: 500}),
+            new BookOfDamage({ itemID: 4, name: 'Book of Damage', description: 'Increases your damage (+5).', value: 100, damageValue: 5}),
+            new BookOfArmor({ itemID: 5, name: 'Book of Armor', description: 'Increases your armor (+5).', value: 100, armorValue: 5})
         ];
     }
 
@@ -74,6 +77,20 @@ class Store {
         }
 
         return this.offer[itemID];
+    }
+
+    getItem (itemID) {
+        if (!itemID){
+            return false;
+        }
+
+        let searchedItem = this.offer.filter(item => item.itemID === itemID);
+
+        if (searchedItem.length === 0) {
+            return;
+        }
+
+        return searchedItem[0];
     }
 
     // Get Offer
@@ -98,6 +115,9 @@ class Miner {
 
         // Value
         this.value = config.value || 50;
+
+        // Miner ID
+        this.minerID = config.minerID;
     }
 
     // Quanity Management
@@ -115,17 +135,30 @@ class Mine {
     constructor () {
         this.miners = [
              // Peon
-            this.peon = new Miner({ name: 'Peon', description: 'Me peon, me work.', income: 1, quanity: 0, value: 50 }),
+            this.peon = new Miner({ minerID: 1, name: 'Peon', description: 'Me peon, me work.', income: 1, quanity: 0, value: 50 }),
 
             // Mine Cart
-            this.mineCart = new Miner({ name: 'Mine Cart', description: 'Straight outta minecraft.', income: 5, quanity: 0, value: 250  }),
+            this.mineCart = new Miner({ minerID: 2, name: 'Mine Cart', description: 'Straight outta minecraft.', income: 5, quanity: 0, value: 250  }),
 
             // Drillers
-            this.driller = new Miner({ name: 'Driller', description: 'Do not confuse with dealer.', income: 10, quanity: 0, value: 500  }),
+            this.driller = new Miner({ minerID: 3, name: 'Driller', description: 'Do not confuse with dealer.', income: 10, quanity: 0, value: 500  }),
 
             // Senior Peons
-            this.seniorPeon = new Miner({ name: 'Senior Peon', description: 'Me smart, me earns a lot, me the best.', income: 50, quanity: 0, value: 2500 })
+            this.seniorPeon = new Miner({ minerID: 4, name: 'Senior Peon', description: 'Me smart, me earns a lot, me the best.', income: 50, quanity: 0, value: 2500 })
         ];  
+    }
+
+    // Set Miner
+    setMiner (minerID, quanity) {
+        if (!minerID || !quanity) {
+            return false;
+        }
+
+        for (let i = 0; i < this.miners.length; i++) {
+            if (this.miners[i].minerID === minerID) {
+                this.miners[i].quanity = quanity;
+            }
+        }
     }
 
     // Get Income
@@ -142,6 +175,34 @@ class Mine {
     // Get Miners
     getMiners () {
         return this.miners;
+    }
+
+    getMinersToSave () {
+        let miners = [];
+
+        this.miners.forEach(miner => {
+            miners.push({
+                minerID: miner.minerID,
+                quanity: miner.quanity,
+            });
+        })
+        
+        return miners;
+    }
+
+    // Get Miner
+    getMiner (minerID) {
+        if (!minerID) {
+            return false;
+        }
+
+        let miner = this.miners.filter(miner => miner.minerID === minerID);
+
+        if (miner.length === 0) {
+            return false;
+        }
+
+        return miner[0];
     }
 }
 
@@ -366,7 +427,7 @@ class Player extends Character {
         this.interface.level.innerHTML = this.level;
 
         // Basic Experience
-        let basicExperience = (this.currentExperience * 100) / this.maxExperience;
+        let basicExperience = Math.floor((this.currentExperience * 100) / this.maxExperience);
 
         // UI - Experience
         this.interface.experience.children[0].innerHTML = `${basicExperience}%`;
@@ -377,7 +438,7 @@ class Player extends Character {
         this.interface.experienceBar.children[0].style.width = `${experienceBarWidth}px`;
 
         // Basic Health
-        let basicHealth = (this.currentHealth * 100) / this.maxHealth;
+        let basicHealth = Math.floor((this.currentHealth * 100) / this.maxHealth);
 
         // UI - Health
         this.interface.health.children[0].innerHTML = `${basicHealth}%`;
@@ -421,6 +482,10 @@ class Player extends Character {
 
     getInventory () {
         return this.inventory;
+    }
+
+    getInventoryToSave () {
+        return this.inventory.map(item => item.itemID);
     }
 }
 
@@ -476,7 +541,7 @@ class Monster extends Character {
     // UI
     updateUI () {
          // Basic Health
-         let basicHealth = (this.currentHealth * 100) / this.maxHealth;
+         let basicHealth = Math.floor((this.currentHealth * 100) / this.maxHealth);
  
          // UI - Health
          this.interface.health.children[0].innerHTML = `${basicHealth}%`;
@@ -559,6 +624,8 @@ class Game {
         profile.damage = this.player.damage;
         profile.gold = this.player.gold;
         profile.totalGold = this.player.totalGold;
+        profile.inventory = this.player.getInventoryToSave();
+        profile.miners = this.mine.getMinersToSave();
 
         // Save
         this.profiles[profileID] = profile;
@@ -616,7 +683,22 @@ class Game {
 
         // Create Mine
         this.mine = new Mine();
+    
+        // Load Miners
+        profile.miners.forEach(miner => {
+            this.mine.setMiner(miner.minerID, miner.quanity);
+        });
+
         this.createMine();
+
+        // Load Inventory
+        profile.inventory.forEach(itemID => {
+            let item = this.store.getItem(itemID);
+
+            if (item) {
+                this.player.toInventory(item);
+            }
+        });
 
         // Create Inventory
         this.createInventory();
@@ -836,6 +918,9 @@ class Game {
 
                 // Rerender
                 this.createMine();
+
+                // Save
+                this.saveProfile();
             });
 
             // Append
@@ -981,8 +1066,6 @@ class Game {
             this.profiles = JSON.parse(fetchedProfiles);
         }
 
-        console.log(this.profiles);
-
         // List Profiles
         this.showProfiles();
 
@@ -1019,6 +1102,8 @@ class Game {
                 damage: 10,
                 gold: 0,
                 totalGold: 0,
+                inventory: [],
+                miners: [],
             });
 
             // Update Profiles in localStorage
@@ -1026,9 +1111,6 @@ class Game {
 
             // Reset Form
             profileName.value = '';
-            
-            // Refresh List
-            this.showProfiles();
         });
    }
 
