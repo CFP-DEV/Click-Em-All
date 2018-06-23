@@ -704,7 +704,8 @@ class Game {
         this.createInventory();
 
         // Income function
-        setInterval(() => {
+        clearInterval(this.mining);
+        this.mining = setInterval(() => {
             this.player.increaseGold(this.mine.getIncome());
         }, 10000);
 
