@@ -598,7 +598,7 @@ class Game {
         }
 
         // Active Scene
-        this.activeScene = 'game';
+        this.activeScene = 'profileSelection';
     }
 
     saveProfile () {
@@ -1111,6 +1111,9 @@ class Game {
 
             // Reset Form
             profileName.value = '';
+
+            // Rerender
+            this.showProfiles();
         });
    }
 
@@ -1138,7 +1141,13 @@ class Game {
 
             // Event Listener
             profileElement.children[profileElement.children.length - 1].addEventListener('click', (e) => {
-                this.init(profile)
+                this.init(profile);
+
+                this.closeScene();
+
+                // Show Game
+                this.activeScene = 'game';
+                this.scenes.game.style.display = 'flex';
             });
 
             profileList.appendChild(profileElement);
