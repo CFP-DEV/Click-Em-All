@@ -268,7 +268,7 @@ class Player extends Character {
         this.gold = config.gold;
 
         // Total Gold
-        this.totalGold = this.gold;
+        this.totalGold = config.totalGold || this.gold;
 
         // Inventory
         this.inventory = [];
@@ -509,9 +509,6 @@ class Monster extends Character {
 
 class Game {
     constructor () {
-        // Profiles
-        this.profiles = ['CFP'];
-
         // Interface
         this.interface = {
             game: document.getElementById('game'),
@@ -539,7 +536,38 @@ class Game {
         this.activeScene = 'game';
     }
 
-    init (profileName) {
+    saveProfile () {
+        // Find Profile
+        let profile;
+        let profileID;
+        for (let i = 0; i < this.profiles.length; i++) {
+            if (this.profiles[i].name === this.player.name) {
+                profile = this.profiles[i];
+                profileID = i;
+
+                break;
+            }
+        }
+
+        // Change Data
+        profile.level = this.player.level;
+        profile.currentHealth = this.player.currentHealth;
+        profile.maxHealth = this.player.maxHealth;
+        profile.currentExperience = this.player.currentExperience;
+        profile.maxExperience = this.player.maxExperience;
+        profile.armor = this.player.armor;
+        profile.damage = this.player.damage;
+        profile.gold = this.player.gold;
+        profile.totalGold = this.player.totalGold;
+
+        // Save
+        this.profiles[profileID] = profile;
+
+        // Update
+        localStorage.setItem('profiles', JSON.stringify(this.profiles));
+    }
+
+    init (profile) {
         // Hide Profile Selection
         this.closeScene();
 
@@ -553,14 +581,16 @@ class Game {
 
         // Create User
         let playerConfig = {
-            name: profileName,
-            level: 1,
-            currentHealth: 100,
-            maxHealth: 100,
-            currentExperience: 0,
-            armor: 2,
-            damage: 10,
-            gold: 0,
+            name: profile.name,
+            level: profile.level,
+            currentHealth: profile.currentHealth,
+            maxHealth: profile.maxHealth,
+            currentExperience: profile.currentExperience,
+            maxExperience: profile.maxExperience,
+            armor: profile.armor,
+            damage: profile.damage,
+            gold: profile.gold,
+            totalGold: profile.totalGold,
         }
 
         this.player = new Player(playerConfig);
@@ -617,6 +647,9 @@ class Game {
 
             // Increase Experience
             this.player.inceaseExperience(e.detail.experience);
+
+            // Save
+            this.saveProfile();
         });
 
         // Player Death
@@ -628,6 +661,9 @@ class Game {
             // Show Death Screen
             this.activeScene = 'death';
             this.scenes.death.style.display = 'flex';
+
+            // Save
+            this.saveProfile();
         });
 
         // Game (Fight)
@@ -637,6 +673,9 @@ class Game {
             // Show Game
             this.activeScene = 'game';
             this.scenes.game.style.display = 'flex';
+
+            // Save
+            this.saveProfile();
         });
     
         // Inventory
@@ -649,6 +688,9 @@ class Game {
             // Show Inventory
             this.activeScene = 'inventory';
             this.scenes.inventory.style.display = 'flex';
+
+            // Save
+            this.saveProfile();
         });
 
         // Mine
@@ -658,6 +700,9 @@ class Game {
             // Show Mine
             this.activeScene = 'mine';
             this.scenes.mine.style.display = 'flex';
+
+            // Save
+            this.saveProfile();
         });
 
         // Shop
@@ -667,6 +712,9 @@ class Game {
             // Show Shop
             this.activeScene = 'shop';
             this.scenes.shop.style.display = 'flex';
+
+            // Save
+            this.saveProfile();
         });
 
         // Profile Selection
@@ -676,6 +724,9 @@ class Game {
             // Show Shop
             this.activeScene = 'profileSelection';
             this.scenes.profileSelection.style.display = 'flex';
+
+            // Save
+            this.saveProfile();
         });
 
         this.interface.newProfile.addEventListener('click', (e) => {
@@ -684,6 +735,9 @@ class Game {
             // Show Shop
             this.activeScene = 'profileSelection';
             this.scenes.profileSelection.style.display = 'flex';
+
+            // Save
+            this.saveProfile();
         });
     }
 
@@ -919,6 +973,16 @@ class Game {
    }
 
    initProfileSelection () {
+        // Load Profiles
+        this.profiles = [];
+        let fetchedProfiles = localStorage.getItem('profiles');
+
+        if (fetchedProfiles) {
+            this.profiles = JSON.parse(fetchedProfiles);
+        }
+
+        console.log(this.profiles);
+
         // List Profiles
         this.showProfiles();
 
@@ -934,7 +998,7 @@ class Game {
             // Check if profile name is available
             let isAvailable = true;
             this.profiles.forEach(profile => {
-                if (profile.name === profileName) {
+                if (profile.name === profileName.value) {
                     isAvailable = false;
                 }
             });
@@ -944,7 +1008,21 @@ class Game {
             }
 
             // Create Profile
-            this.profiles.push(profileName.value);
+            this.profiles.push({
+                name: profileName.value,
+                level: 1,
+                currentHealth: 100,
+                maxHealth: 100,
+                currentExperience: 0,
+                maxExperience: 100,
+                armor: 3,
+                damage: 10,
+                gold: 0,
+                totalGold: 0,
+            });
+
+            // Update Profiles in localStorage
+            localStorage.setItem('profiles', JSON.stringify(this.profiles));
 
             // Reset Form
             profileName.value = '';
@@ -969,7 +1047,7 @@ class Game {
             // Set Content
             profileElement.innerHTML = `
                 <div class="profile-list__profile__name">
-                    ${profile}
+                    ${profile.name}
                 </div>
                 <button class="profile-list__profile__run btn btn--is-outline">
                     RUN
