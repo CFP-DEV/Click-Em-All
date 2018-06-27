@@ -601,6 +601,9 @@ class Game {
 
         // Active Scene
         this.activeScene = 'profileSelection';
+
+        // UI Active
+        this.uiActive = true;
     }
 
     saveProfile () {
@@ -652,7 +655,7 @@ class Game {
         let playerConfig = {
             name: profile.name,
             level: profile.level,
-            currentHealth: profile.currentHealth,
+            currentHealth: 10,
             maxHealth: profile.maxHealth,
             currentExperience: profile.currentExperience,
             maxExperience: profile.maxExperience,
@@ -718,6 +721,10 @@ class Game {
     initUI () {
         // Monster Events
         this.enemy.interface.name.addEventListener('click', (e) => {
+            if (!this.uiActive){
+                return;
+            }
+
             // Monster Turn
             this.player.receiveDamage(this.enemy.dealDamage());
 
@@ -741,18 +748,42 @@ class Game {
         document.addEventListener('onDeath', (e) => {
             this.closeScene();
 
-            // Save Score
+            // Save Profile
+            this.saveProfile();
+
+            // Update High Scores
+            if (!localStorage.getItem('scores') || JSON.parse(localStorage.getItem('scores')).length === 0) {
+                localStorage.setItem('scores', JSON.stringify([{ name: this.player.name, gold: this.player.totalGold}]));
+            } else {
+                let scores = JSON.parse(localStorage.getItem('scores'));
+                scores.push({
+                    name: this.player.name,
+                    gold: this.player.totalGold
+                });
+                localStorage.setItem('scores', JSON.stringify(scores));
+            }
+
+            // Remove Profile
+            let profiles = JSON.parse(localStorage.getItem('profiles'));
+            let newProfiles = profiles.filter(profile => profile.name !== this.player.name);
+
+            // Update Profiles
+            localStorage.setItem('profiles', JSON.stringify(newProfiles));
 
             // Show Death Screen
             this.activeScene = 'death';
             this.scenes.death.style.display = 'flex';
 
-            // Save
-            this.saveProfile();
+            // UI Active
+            this.uiActive = false;
         });
 
         // Game (Fight)
         this.interface.game.addEventListener('click', (e) => {
+            if (!this.uiActive){
+                return;
+            }
+            
             this.closeScene();
 
             // Show Game
@@ -765,6 +796,10 @@ class Game {
     
         // Inventory
         this.interface.inventory.addEventListener('click', (e) => {
+            if (!this.uiActive){
+                return;
+            }
+            
             this.closeScene();
 
             // Refresh Inventory
@@ -780,6 +815,10 @@ class Game {
 
         // Mine
         this.interface.mine.addEventListener('click', (e) => {
+            if (!this.uiActive){
+                return;
+            }
+            
             this.closeScene();
 
             // Show Mine
@@ -792,6 +831,10 @@ class Game {
 
         // Shop
         this.interface.shop.addEventListener('click', (e) => {
+            if (!this.uiActive){
+                return;
+            }
+            
             this.closeScene();
 
             // Show Shop
@@ -804,6 +847,10 @@ class Game {
 
         // Profile Selection
         this.interface.changeProfile.addEventListener('click', (e) => {
+            if (!this.uiActive){
+                return;
+            }
+            
             this.closeScene();
 
             // Show Profile Selection
@@ -815,14 +862,7 @@ class Game {
         });
 
         this.interface.newProfile.addEventListener('click', (e) => {
-            this.closeScene();
-
-            // Show Profile Selection
-            this.activeScene = 'profileSelection';
-            this.scenes.profileSelection.style.display = 'flex';
-
-            // Save
-            this.saveProfile();
+            location.reload();
         });
 
         this.interface.highscores.addEventListener('click', (e) => {
@@ -836,7 +876,9 @@ class Game {
             this.scenes.highscores.style.display = 'flex';
 
             // Save Profile
-            this.saveProfile();
+            if (this.uiActive) {
+                this.saveProfile();
+            }
         });
     }
 
@@ -1175,30 +1217,34 @@ class Game {
    }
 
    showScores () {
-    // Profile List
-    let scoresList = document.getElementById('scores-list');
+        // Profile List
+        let scoresList = document.getElementById('scores-list');
 
-    // Reset DOM
-    scoresList.innerHTML = '';
+        // Reset DOM
+        scoresList.innerHTML = '';
 
-    JSON.parse(localStorage.getItem('profiles')).forEach(profile => {
-        // Create Element
-        let profileElement = document.createElement('li');
-        profileElement.classList.add('profile-list__profile');
+        if (!localStorage.getItem('scores')) {
+            return;
+        }
 
-        // Set Content
-        profileElement.innerHTML = `
-            <div class="profile-list__profile__name">
-                ${profile.name}
-            </div>
-            <div class="profile-list__profile__score">
-                TOTAL GOLD: ${profile.totalGold}
-            </div>
-        `;
-
-        scoresList.appendChild(profileElement);
-    });
-}
+        JSON.parse(localStorage.getItem('scores')).forEach(score => {
+            // Create Element
+            let profileElement = document.createElement('li');
+            profileElement.classList.add('profile-list__profile');
+    
+            // Set Content
+            profileElement.innerHTML = `
+                <div class="profile-list__profile__name">
+                    ${score.name}
+                </div>
+                <div class="profile-list__profile__score">
+                    TOTAL GOLD: ${score.gold}
+                </div>
+            `;
+    
+            scoresList.appendChild(profileElement);
+        });
+    }
 }
 
 window.onload = function () {
